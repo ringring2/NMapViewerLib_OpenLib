@@ -52,11 +52,13 @@ import com.nhn.android.mapviewer.overlay.NMapPathDataOverlay;
  * 
  * @author kyjkim
  */
-public class NMapViewer extends NMapActivity {
+public class NMapViewer extends NMapActivity // NMapActivity로부터 상속받음
+{
 	private static final String LOG_TAG = "NMapViewer";
 	private static final boolean DEBUG = false;
 
 	// set your API key which is registered for NMapViewer library.
+	//NMapViewer라이브러리에 등록된 API키를 설정합니다.
 	private static final String API_KEY = "Your API Key";
 
 	private MapContainerView mMapContainerView;
@@ -105,15 +107,15 @@ public class NMapViewer extends NMapActivity {
 			// create map view
 			mMapView = new NMapView(this);
 
-			// create parent view to rotate map view
+			// create parent view to rotate map view //상위 뷰를 생성하여 맵 뷰를 회전합니다.
 			mMapContainerView = new MapContainerView(this);
 			mMapContainerView.addView(mMapView);
 
-			// set the activity content to the parent view
+			// set the activity content to the parent view  //활동 내용을 상위 보기로 설정
 			setContentView(mMapContainerView);
 		}
 
-		// set a registered API key for Open MapViewer Library
+		// set a registered API key for Open MapViewer Library //NMapActivity라이브러리를 열기위해 API키 설정
 		mMapView.setApiKey(API_KEY);
 
 		// initialize map view
@@ -182,6 +184,7 @@ public class NMapViewer extends NMapActivity {
 	protected void onDestroy() {
 
 		// save map view state such as map center position and zoom level.
+		//지도 중심 위치 및 줌 레벨과 같은 지도 보기 상태를 저장합니다.
 		saveInstanceState();
 
 		super.onDestroy();
@@ -262,7 +265,7 @@ public class NMapViewer extends NMapActivity {
 		NMapPathDataOverlay pathDataOverlay = mOverlayManager.createPathDataOverlay(pathData);
 		if (pathDataOverlay != null) {
 
-			// add path data with polygon type
+			// add path data with polygon type // 폴리곤 유형의 경로 데이터 추가
 			NMapPathData pathData2 = new NMapPathData(4);
 			pathData2.initPathData();
 			pathData2.addPathPoint(127.106, 37.367, NMapPathLineStyle.TYPE_SOLID);
@@ -271,20 +274,20 @@ public class NMapViewer extends NMapActivity {
 			pathData2.addPathPoint(127.106, 37.368, 0);
 			pathData2.endPathData();
 			pathDataOverlay.addPathData(pathData2);
-			// set path line style
+			// set path line style //경로 선 스타일 설정
 			NMapPathLineStyle pathLineStyle = new NMapPathLineStyle(mMapView.getContext());
 			pathLineStyle.setPataDataType(NMapPathLineStyle.DATA_TYPE_POLYGON);
 			pathLineStyle.setLineColor(0xA04DD2, 0xff);
 			pathLineStyle.setFillColor(0xFFFFFF, 0x00);
 			pathData2.setPathLineStyle(pathLineStyle);
 
-			// add circle data
+			// add circle data //원 데이터 추가
 			NMapCircleData circleData = new NMapCircleData(1);
 			circleData.initCircleData();
 			circleData.addCirclePoint(127.1075, 37.3675, 50.0F);
 			circleData.endCircleData();
 			pathDataOverlay.addCircleData(circleData);
-			// set circle style
+			// set circle style // 원을 그리다
 			NMapCircleStyle circleStyle = new NMapCircleStyle(mMapView.getContext());
 			circleStyle.setLineType(NMapPathLineStyle.TYPE_DASH);
 			circleStyle.setFillColor(0x000000, 0x00);
@@ -297,29 +300,30 @@ public class NMapViewer extends NMapActivity {
 
 	private void testPathPOIdataOverlay() {
 
-		// set POI data
+		// set POI data //POI 데이터 설정
 		NMapPOIdata poiData = new NMapPOIdata(4, mMapViewerResourceProvider, true);
 		poiData.beginPOIdata(4);
 		poiData.addPOIitem(349652983, 149297368, "Pizza 124-456", NMapPOIflagType.FROM, null);
 		poiData.addPOIitem(349652966, 149296906, null, NMapPOIflagType.NUMBER_BASE + 1, null);
 		poiData.addPOIitem(349651062, 149296913, null, NMapPOIflagType.NUMBER_BASE + 999, null);
 		poiData.addPOIitem(349651376, 149297750, "Pizza 000-999", NMapPOIflagType.TO, null);
-		poiData.endPOIdata();
-
-		// create POI data overlay
+		poiData.endPOIdata(); 
+		
+		// create POI data overlay //POI데이터 오버레이 작성
 		NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null);
 
-		// set event listener to the overlay
+		// set event listener to the overlay //이벤트 수신기를 오버레이 상태로 설정합니다.
 		poiDataOverlay.setOnStateChangeListener(onPOIdataStateChangeListener);
 
 	}
 
-	private void testPOIdataOverlay() {
+	private void testPOIdataOverlay() 
+	{
 
-		// Markers for POI item
+		// Markers for POI item //POI항목에 대한 마커
 		int markerId = NMapPOIflagType.PIN;
 
-		// set POI data
+		// set POI data //POI데이터 설정
 		NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider);
 		poiData.beginPOIdata(2);
 		NMapPOIitem item = poiData.addPOIitem(127.0630205, 37.5091300, "Pizza 777-111", markerId, 0);
@@ -718,8 +722,14 @@ public class NMapViewer extends NMapActivity {
 	 * @param menu the Menu to which entries may be added
 	 * @return true
 	 */
+	/*초기화 중에 호출되어 활동을 통해 메뉴를 설정할 수 있습니다.
+	* 
+	*@param메뉴-항목을 추가할 수 있는 메뉴
+	*@true반환
+	*/
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) //옵션메뉴 설정해준다.
+	{
 		super.onCreateOptionsMenu(menu);
 
 		MenuItem menuItem = null;
@@ -782,12 +792,15 @@ public class NMapViewer extends NMapActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu pMenu) {
+	public boolean onPrepareOptionsMenu(Menu pMenu)
+	{
 		super.onPrepareOptionsMenu(pMenu);
 
 		int viewMode = mMapController.getMapViewMode();
-		boolean isTraffic = mMapController.getMapViewTrafficMode();
+		boolean isTraffic = mMapController.getMapViewTrafficMode(); 
+		//오버라이딩 전: isTrafficMapActivated() : Boolean실시간 교통 지도의 활성화 여부를 가져온다.
 		boolean isBicycle = mMapController.getMapViewBicycleMode();
+		//오버라이딩 전: isBicycleMapActivated() : Boolean자전거 지도의 활성화 여부를 가져온다.
 
 		pMenu.findItem(MENU_ITEM_CLEAR_MAP).setEnabled(
 			(viewMode != NMapView.VIEW_MODE_VECTOR) || isTraffic || mOverlayManager.sizeofOverlays() > 0);
@@ -810,6 +823,13 @@ public class NMapViewer extends NMapActivity {
 	 * @return true if the Menu item was legit (and we consumed it), false
 	 *         otherwise
 	 */
+	/**
+	*메뉴에서 항목을 선택하면 호출됩니다.
+	* 
+	*@param항목-선택한 메뉴 항목
+	*메뉴 항목이 유효한 경우(그리고 우리가 사용한 경우)@true반환, false
+	* 그렇지 않으면
+	*/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -919,9 +939,10 @@ public class NMapViewer extends NMapActivity {
 	};
 
 	/** 
-	 * Container view class to rotate map view.
+	 * Container view class to rotate map view. //*회전 맵 보기를 위해 컨테이너 뷰 클래스.
 	 */
-	private class MapContainerView extends ViewGroup {
+	private class MapContainerView extends ViewGroup //ViewGroup으로부터 상속받음
+	{
 
 		public MapContainerView(Context context) {
 			super(context);
